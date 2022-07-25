@@ -1,4 +1,4 @@
-# pomodoro-electron 番茄时钟
+# 土鸡报时
 
 
-番茄时钟 electron 版本
+土鸡时钟，准点报时。
