@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="../css/view.css" rel="stylesheet">
+    <link rel="import" href="./src/page/nav.html">
+    <title>关于</title>
+</head>
+
+<body>
+    <div class="nav">
+        <script src="../js/nav.js"></script>
+    </div>
+    <script src="../js/view.js"></script>
+
+    <div class="content">
+        <div class="task">
+            <div id="exec-task-1" class="exec-task" onclick="task_start(1,600)">
+                <div>
+                    Task Name 1
+                </div>
+                <div id="time-1">
+                    00:00
+                </div>
+                <div>
+                    <progress id="exec-task-progress-1" value="0" max="123.321"></progress>
+                </div>
+            </div>
+            <div id="exec-task-1" class="exec-task" onclick="task_start(2,600)">
+                <div>
+                    Task Name 2
+                </div>
+                <div id="time-2">
+                    00:00
+                </div>
+                <div>
+                    <progress id="exec-task-progress-2" value="0" max="123.321"></progress>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

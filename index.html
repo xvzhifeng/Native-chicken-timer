@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <link href="./styles.css" rel="stylesheet">
+  <link rel="import" href="./src/page/nav.html">
+  <title>番茄时钟</title>
+</head>
+
+<body>
+  <div class="nav">
+    <script src="./src/js/nav.js"></script>
+  </div>
+
+  <div class="content">
+    <a href="./src/page/about.html">about</a>
+    <div id="timerContainer"></div>
+  </div>
+
+  
+  <script src="./renderer.js"></script>
+</body>
+
+</html>

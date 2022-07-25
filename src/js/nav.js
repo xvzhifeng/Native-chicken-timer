@@ -1,0 +1,10 @@
+document.writeln(" <style>");
+document.writeln("        @import url(\'../css/nav.css\');");
+document.writeln("    </style>");
+document.writeln("    <ul class=\'sidenav\'>");
+document.writeln("        <li><a class=\'active\' href=\'../page/main.html\'>主页</a></li>");
+document.writeln("        <li><a href=\'../page/add.html\'>添加</a></li>");
+document.writeln("        <li><a href=\'../page/view.html\'>查看</a></li>");
+document.writeln("        <li><a href=\'../page/about.html\'>关于</a></li>");
+document.writeln("    </ul>");
+document.writeln("");

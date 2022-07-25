@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"> -->
+    <link href="../css/main.css" rel="stylesheet">
+    <link rel="import" href="./src/page/nav.html">
+    <title>土鸡报时</title>
+</head>
+
+<body>
+    <div class="nav">
+        <script src="../js/nav.js"></script>
+    </div>
+
+    <div class="content">
+        <div class="task">
+            <div class="TaskItem">
+                <div class="Task" id="d-1" onclick="start('测试',40)">
+                    <p>任务一：测试</p>
+                    <span id="tid-1" value="40">40分钟</span>
+                </div>
+            </div>
+            <div class="TaskItem" id="d-2">
+                <div class="Task" id="d-2" onclick="start('学习',30)">
+                    <p>任务二：学习</p>
+                    <span id="tid-2" value="30">30分钟</span>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+    <script src="../js/main.js"></script>
+</body>
+
+</html>

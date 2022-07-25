@@ -1,0 +1,14 @@
+.exec-task {
+    /* display: flex; */
+    
+    text-align: center;
+    align-items: center;
+    max-width: 40%;
+    margin: 1rem;
+    box-shadow: 0 0 1px 0 darkgray;
+    float: left;
+}
+
+.task {
+    flex-direction: row;
+}
