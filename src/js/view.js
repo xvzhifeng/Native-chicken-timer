@@ -1,7 +1,8 @@
-const Timer = require('timer.js')
-const { ipcRenderer } = require('electron')
+// const Timer = require('timer.js')
+// const { ipcRenderer } = require('electron')
+let getClient = require('../lib/mysqlpool.js') ;
 
-
+let client = null
 let status = [
     {id:1, value:30, isStart:false, workTimer: null},
     {id:2, value:300, isStart:false, workTimer: null}
@@ -51,7 +52,7 @@ function initProgress(id, value) {
 function updateTime(id, ms, index) {
     console.log(id)
     console.log('ms', ms)
-    const timerContainer = document.getElementById(`time-${id}`)
+    const timerContainer = document.getElementById(`exec-task-time-${id}`)
     const s = (ms / 1000).toFixed(0)
     const ss = s % 60
     const mm = (s / 60).toFixed(0)
@@ -59,7 +60,7 @@ function updateTime(id, ms, index) {
     timerContainer.innerText = `${mm.toString().padStart(2, 0)}: ${ss.toString().padStart(2, 0)}`
 }
 
-let  notifiF = async () => {
+let  notifiF = async (id) => {
     const res = await new Promise((resolve, reject) => {
         const notification = new Notification(`任务${id}结束`,{
             body: '是否开始休息'
@@ -123,10 +124,37 @@ let task_start = (id, value) => {
     // startWork(id,value)
 }
 
-// let start = () => {
-//     var t2 = window.setInterval(function() {
-//         // 执行数据库操作
-//         console.log('每隔1秒钟执行一次')
-//         },1000)
-// }
-// start()
+let generateTaskView = (id, value) => {
+    let demo = document.getElementById("exec-task-demo");
+    let demo1 = demo.cloneNode(true);
+    demo1.setAttribute("id", `exec-task-${id}`)
+    demo1.setAttribute("onclick",`task_start(${id}, ${value})`)
+    let div = demo1.getElementsByTagName("div")
+    let name = div[0]
+    let time = div[1]
+    let progress = div[2]
+    name.setAttribute("id",`exec-task-name-${id}`)
+    time.setAttribute("id",`exec-task-time-${id}`)
+    progress.setAttribute("id",`exec-task-progress-${id}`)
+    document.getElementById("view-task").appendChild(demo1);
+    // demo1.onclick = task_start(id, value)
+}
+
+let start = async () => {
+    if(client == null) {
+        client = await getClient()
+    }
+    
+    var t2 = window.setInterval( async function() {
+        let select_cmd = `select * from nct_timer where status=1`
+        // 执行数据库操作
+        let result = await client.awaitQuery(select_cmd)
+        for(let i =0;i<result.length;i++) {
+            console.log(result[i].id)
+            generateTaskView(result[i].id, result[i].interval_time)
+        }
+        console.log(result)
+        console.log('每隔1秒钟执行一次')
+        },100000)
+}
+start()

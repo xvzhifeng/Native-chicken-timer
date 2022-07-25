@@ -19,6 +19,7 @@
     "electron": "^17.0.0"
   },
   "dependencies": {
+    "mysql-await": "^2.1.8",
     "timer.js": "^1.0.4"
   }
 }

@@ -21,3 +21,18 @@
 .task {
     flex-direction: row;
 }
+.main {
+    /* display:none */
+}
+
+.view {
+    display: none
+}
+
+.add {
+    display: none;
+}
+
+.about{
+    display: none;
+}

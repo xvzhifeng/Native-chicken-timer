@@ -6,34 +6,77 @@
     <!-- <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"> -->
     <link href="../css/main.css" rel="stylesheet">
+    <link href="../css/view.css" rel="stylesheet">
+    <link href="../css/add.css" rel="stylesheet">
+    <link href="../css/about.css" rel="stylesheet">
+    
     <link rel="import" href="./src/page/nav.html">
     <title>土鸡报时</title>
 </head>
 
 <body>
-    <div class="nav">
-        <script src="../js/nav.js"></script>
-    </div>
+    <style>
+        @import url("../css/nav.css");
+    </style>
+    <ul class="sidenav">
+        <li><a id="a-main" class="active" onclick="change('main')">主页</a></li>
+        <li><a id="a-add" onclick="change('add')">添加</a></li>
+        <li><a id="a-view" onclick="change('view')">查看</a></li>
+        <li><a id="a-about"onclick="change('about')">关于</a></li>
+    </ul>
 
     <div class="content">
-        <div class="task">
-            <div class="TaskItem">
-                <div class="Task" id="d-1" onclick="start('测试',40)">
-                    <p>任务一：测试</p>
-                    <span id="tid-1" value="40">40分钟</span>
+        <!-- main page -->
+        <div id="main" class="main">
+            <div class="task">
+                <div class="TaskItem">
+                    <div class="Task" id="d-1" onclick="start('测试',40)">
+                        <p>任务一：测试</p>
+                        <span id="tid-1" value="40">40分钟</span>
+                    </div>
                 </div>
-            </div>
-            <div class="TaskItem" id="d-2">
-                <div class="Task" id="d-2" onclick="start('学习',30)">
-                    <p>任务二：学习</p>
-                    <span id="tid-2" value="30">30分钟</span>
+                <div class="TaskItem" id="d-2">
+                    <div class="Task" id="d-2" onclick="start('学习',30)">
+                        <p>任务二：学习</p>
+                        <span id="tid-2" value="30">30分钟</span>
+                    </div>
                 </div>
             </div>
         </div>
-        
+
+        <!-- add page -->
+        <div id="add" class="add">
+            add page
+        </div>
+        <!-- view page -->
+        <div id="view" class="view">
+            <div id="view-task" class="task">
+                <div id="exec-task-demo" class="exec-task" onclick="task_start(1,600)">
+                    <div id="exec-task-name-demo">
+                        Task Name 1
+                    </div>
+                    <div id="exec-task-time-demo">
+                        00:00
+                    </div>
+                    <div>
+                        <progress id="exec-task-progress-demo" value="0" max="123.321"></progress>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <!-- about page -->
+        <div id="about" class="about">
+            <div>
+                about
+            </div>
+
+        </div>
 
     </div>
     <script src="../js/main.js"></script>
+    <script src="../js/view.js"></script>
+    <script src="../js/about.js"></script>
+    <script src="../js/add.js"></script>
 </body>
 
 </html>

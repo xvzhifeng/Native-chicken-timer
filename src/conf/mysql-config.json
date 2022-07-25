@@ -1,0 +1,7 @@
+{
+    "connectionLimit": 10,
+    "host": "m6",
+    "user": "root",
+    "password": "123456",
+    "database": "native_chicken_timer"
+}
