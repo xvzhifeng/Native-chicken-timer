@@ -10,9 +10,9 @@ create database if not exists native_chicken_timer;
 
 use native_chicken_timer;
 
-drop table ntc_timer;
+drop table nct_timer;
 
-create table if not exists ntc_timer (
+create table if not exists nct_timer (
 	id int(10) primary key not null auto_increment,
 	task_name varchar(30),
 	start_time datetime,
@@ -23,9 +23,10 @@ create table if not exists ntc_timer (
 	status int default(1) comment '0 删除数据 1 正常数据'
 ) comment="任务时间信息";
 
-select * from ntc_timer;
 
-insert into ntc_timer (task_name,interval_time)
+select * from nct_timer;
+
+insert into nct_timer (task_name,interval_time)
 values("task1", 600),
 ('task2',80);
 ```
