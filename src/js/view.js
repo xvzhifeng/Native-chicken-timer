@@ -1,12 +1,12 @@
 // const Timer = require('timer.js')
 // const { ipcRenderer } = require('electron')
-let getClient = require('../lib/mysqlpool.js') ;
-
+let getClient = require('../lib/mysqlpool.js');
+let s_tool = require('../lib/data')
 let client = null
-let status = [
-    {id:1, value:30, isStart:false, workTimer: null},
-    {id:2, value:300, isStart:false, workTimer: null}
-]
+// let status = [
+//     {id:1, value:30, isStart:false, workTimer: null},
+//     {id:2, value:300, isStart:false, workTimer: null}
+// ]
 
 function progress_load(n){
     if (n==0) {alert("下载完成")};
@@ -91,53 +91,102 @@ async function notification(id) {
     }
 }
 
+let updateData = async (data) => {
+    if(client == null) {
+        client = await getClient()
+    }
+    let update_cmd = `update nct_timer
+                        set remaninder_time = ${data.remaninder_time}
+                        where id = ${data.id}`
+    let res = await client.awaitQuery(update_cmd)
+    console.log('更新 :' + res)
+}
 
+let deleteData = async (id) => {
+    document.getElementById(`exec-task-${id}`).remove()
+    s_tool.remove(id)
+    if(client == null) {
+        client = await getClient()
+    }
+    let update_cmd = `update nct_timer
+                        set status = 0
+                        where id = ${id}`
+    let res = await client.awaitQuery(update_cmd)
+    console.log('delete :' + res)
+}
 
 // 启动Task
 let task_start = (id, value) => {
-    console.log(status)
-    for(let i=0;i<status.length;i++) {
-        if(status[i].id == id) {
-            initProgress(id, status[i].value);
-            if(status[i].isStart) {
-                status[i].workTimer.pause();
-                status[i].isStart = false;
-            } else if (status[i].workTimer != null) {
-                status[i].isStart = true;
-                status[i].workTimer.start(status[i].value);
+    console.log(t_tool.status)
+    for(let i=0;i<t_tool.status.length;i++) {
+        if(t_tool.status[i].id == id) {
+            if(t_tool.status[i].isStart) {
+                t_tool.status[i].workTimer.pause();
+                updateData(t_tool.status[i])
+                t_tool.status[i].isStart = false;
+            } else if (t_tool.status[i].workTimer != null) {
+                t_tool.status[i].isStart = true;
+                t_tool.status[i].workTimer.start(t_tool.status[i].remaninder_time);
             } else {
-                status[i].isStart = true;
-                status[i].workTimer = new Timer({
+                t_tool.status[i].isStart = true;
+                t_tool.status[i].workTimer = new Timer({
                     ontick: (timeValue) => {
                         console.log('onclick')
                         updateTime(id, timeValue, i)
-                        status[i].value = (timeValue / 1000).toFixed(0);
+                        t_tool.status[i].remaninder_time = (timeValue / 1000).toFixed(0);
                     }, onend: () => {
                         console.log('onend')
                         notification(id)
+                        deleteData(id)
                     }
                 });
-                status[i].workTimer.start(status[i].value);
+                t_tool.status[i].workTimer.start(t_tool.status[i].remaninder_time);
             }
         }
     }
     // startWork(id,value)
 }
 
-let generateTaskView = (id, value) => {
-    let demo = document.getElementById("exec-task-demo");
-    let demo1 = demo.cloneNode(true);
-    demo1.setAttribute("id", `exec-task-${id}`)
-    demo1.setAttribute("onclick",`task_start(${id}, ${value})`)
-    let div = demo1.getElementsByTagName("div")
-    let name = div[0]
-    let time = div[1]
-    let progress = div[2]
-    name.setAttribute("id",`exec-task-name-${id}`)
-    time.setAttribute("id",`exec-task-time-${id}`)
-    progress.setAttribute("id",`exec-task-progress-${id}`)
-    document.getElementById("view-task").appendChild(demo1);
+let generateTaskView = (data) => {
+    if(document.getElementById(`exec-task-${data.id}`)) {
+        // let demo1 = document.getElementById(`exec-task-${data.id}`);
+        // demo1.setAttribute("id", `exec-task-${data.id}`)
+        // demo1.setAttribute("onclick",`task_start(${data.id}, ${data.remaninder_time})`)
+        // let div = demo1.getElementsByTagName("div")
+        // let name = div[0]
+        // let time = div[1]
+        // let progress = div[2]
+        // name.setAttribute("id",`exec-task-name-${data.id}`)
+        // name.innerHTML = data.task_name
+        // time.setAttribute("id",`exec-task-time-${data.id}`)
+        // progress.setAttribute("id",`exec-task-progress-${data.id}`)
+        console.log("该元素已经存在，无需添加")
+    } else {
+        let demo = document.getElementById("exec-task-demo");
+        let demo1 = demo.cloneNode(true);
+        demo1.setAttribute("id", `exec-task-${data.id}`)
+        demo1.setAttribute("onclick",`task_start(${data.id}, ${data.remaninder_time})`)
+        let div = demo1.getElementsByTagName("div")
+        let name = div[0]
+        let time = div[1]
+        let progress = div[2]
+        name.setAttribute("id",`exec-task-name-${data.id}`)
+        name.innerHTML = data.task_name
+        time.setAttribute("id",`exec-task-time-${data.id}`)
+        time.innerHTML = `${data.remaninder_time%60} : ${(data.remaninder_time/60).toFixed(0)}`
+        progress.setAttribute("id",`exec-task-progress-${data.id}`)
+        progress.setAttribute("max",data.interval_time)
+        document.getElementById("view-task").appendChild(demo1);
+    }
+    
     // demo1.onclick = task_start(id, value)
+}
+
+let updateStatus = async () => {
+    let select_cmd = `select * from nct_timer where status=1`
+    // 执行数据库操作
+    let result = await client.awaitQuery(select_cmd)
+    s_tool.update(result)
 }
 
 let start = async () => {
@@ -146,13 +195,14 @@ let start = async () => {
     }
     
     var t2 = window.setInterval( async function() {
-        let select_cmd = `select * from nct_timer where status=1`
-        // 执行数据库操作
-        let result = await client.awaitQuery(select_cmd)
-        for(let i =0;i<result.length;i++) {
-            console.log(result[i].id)
-            generateTaskView(result[i].id, result[i].interval_time)
-        }
+        // let select_cmd = `select * from nct_timer where status=1`
+        // // 执行数据库操作
+        // let result = await client.awaitQuery(select_cmd)
+        // for(let i =0;i<result.length;i++) {
+        //     console.log(result[i].id)
+        //     generateTaskView(result[i].id, result[i].interval_time)
+        // }
+        updateStatus()
         console.log(result)
         console.log('每隔1秒钟执行一次')
         },100000)

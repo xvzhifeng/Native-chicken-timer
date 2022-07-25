@@ -12,3 +12,7 @@
 .task {
     flex-direction: row;
 }
+
+#exec-task-demo {
+    display: none;
+}

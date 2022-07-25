@@ -1,12 +1,12 @@
 {
-  "name": "pomodoro-electron",
+  "name": "native-chicken-timer",
   "version": "1.0.0",
   "description": "A minimal Electron application",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/tangxve/pomodoro-electron",
+  "repository": "https://github.com/xvzhifeng/Native-chicken-timer.git",
   "keywords": [
     "Electron",
     "quick",
@@ -14,7 +14,7 @@
     "tutorial",
     "demo"
   ],
-  "author": "Tangxve",
+  "author": "xvzhifeng",
   "devDependencies": {
     "electron": "^17.0.0"
   },
