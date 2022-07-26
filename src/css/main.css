@@ -14,8 +14,79 @@
     align-items: center;
     max-width: 40%;
     margin: 1rem;
-    box-shadow: 0 0 1px 0 darkgray;
+    box-shadow: 0 2px 2px 0 darkgray;
     float: left;
+    /* background-color: aqua; */
+    border-radius: 2px;
+}
+
+.section {
+    width: 90%;
+    height: 100%;
+    display: block;
+    float: left;
+    box-shadow: 1px 2px 2px 1px darkgrey;
+    margin: 1rem;
+    border-style: solid;
+    border-color: darkgrey;
+    border-width: 1px 0px 0px 0px;
+    border-radius: 1rem;
+}
+
+
+.TaskItem-0 {
+    /* display: flex; */
+    
+    text-align: center;
+    align-items: center;
+    max-width: 40%;
+    margin: 1rem;
+    box-shadow: 0 2px 2px 0 darkgray;
+    float: left;
+    background-color: rgba(134, 11, 11, 0.61);
+    border-radius: 2px;
+}
+
+.TaskItem-1 {
+    /* display: flex; */
+    
+    text-align: center;
+    align-items: center;
+    max-width: 40%;
+    margin: 1rem;
+    box-shadow: 0 2px 2px 0 darkgray;
+    float: left;
+    background-color: rgba(79, 130, 160, 0.61);
+    border-radius: 2px;
+}
+
+.TaskItem-2 {
+    /* display: flex; */
+    
+    text-align: center;
+    align-items: center;
+    max-width: 40%;
+    margin: 1rem;
+    box-shadow: 0 2px 2px 0 darkgray;
+    float: left;
+    background-color: rgba(68, 184, 74, 0.61);
+    border-radius: 2px;
+}
+
+#show-task-demo {
+    display: none;
+}
+.TaskItem-3 {
+    /* display: flex; */
+    
+    text-align: center;
+    align-items: center;
+    max-width: 40%;
+    margin: 1rem;
+    box-shadow: 0 2px 2px 0 darkgray;
+    float: left;
+    background-color: rgba(163, 177, 38, 0.61);
+    border-radius: 2px;
 }
 
 .task {
@@ -35,4 +106,8 @@
 
 .about{
     display: none;
+}
+
+.show-task-item {
+    margin: 2px;
 }

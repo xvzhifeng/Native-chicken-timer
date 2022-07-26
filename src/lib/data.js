@@ -1,12 +1,18 @@
 let getClient = require('./mysqlpool')
-let client = getClient()
+let client =  []
 let is_change = new Set()
 
 let status = [
-    // { id: 1, task_name: "t1", interval_time: 30, remaninder_time: 30, isStart: false, workTimer: null },
-    // { id: 2, task_name: "t2", interval_time: 300, remaninder_time: 300, isStart: false, workTimer: null }
+    // { id: 1, task_name: "t1", interval_time: 30, remain_time: 30, isStart: false, workTimer: null },
+    // { id: 2, task_name: "t2", interval_time: 300, remain_time: 300, isStart: false, workTimer: null }
 ]
+
+let all_task = []
 let set_process = new Set()
+
+let update_task = (result) => {
+    all_task = result;
+}
 
 let update = (result) => {
     for (let i = 0; i < result.length; i++) {
@@ -18,15 +24,15 @@ let update = (result) => {
             // generateTaskView(result[i])
         } else {
             for(let j =0;j<status.length;j++) {
-                if(result[i].id == status[j].id && result[i].remaninder_time < status[j].remaninder_time) {
+                if(result[i].id == status[j].id && result[i].remain_time < status[j].remain_time) {
                     is_change.add(result[i].id);
                     console.log("change status")
-                    console.log(`result[i].remaninder_time ${result[i].remaninder_time} != status[j].remaninder_time
-                    ${status[j].remaninder_time} ${status}`)
+                    console.log(`result[i].remain_time ${result[i].remain_time} != status[j].remain_time
+                    ${status[j].remain_time} ${status}`)
                 }
             }
         }
-        console.log(result[i].id)
+        // console.log(result[i].id)
     }
 }
 
@@ -50,6 +56,13 @@ let set_is_change = (v) => {
 }
 
 
+let get_client = async ()=> {
+    if(client.length == 0) {
+        client.push(await getClient())
+    }
+    return client
+}
+
 module.exports.status = status
 module.exports.set_process = set_process
 module.exports.update = update
@@ -57,3 +70,5 @@ module.exports.set_is_change = set_is_change
 module.exports.get_is_change = get_is_change
 module.exports.is_change = is_change
 module.exports.remove = remove
+module.exports.client = client
+module.exports.get_client = get_client

@@ -1,13 +1,14 @@
-// const Timer = require('timer.js')
+const Timer = require('timer.js')
 // const { ipcRenderer } = require('electron')
 let getClient = require('../lib/mysqlpool.js');
 let s_tool = require('../lib/data')
+let date = require('../lib/date')
 let client = null
 // let status = [
 //     {id:1, value:30, isStart:false, workTimer: null},
 //     {id:2, value:300, isStart:false, workTimer: null}
 // ]
-
+let audio_rain = new Audio(`../resource/rain.mp3`);
 function progress_load(n) {
     if (n == 0) { alert("下载完成") };
     var progress = document.getElementById("progress");
@@ -76,6 +77,14 @@ let notifiF = async (id) => {
     return res
 }
 
+function player(name) {
+    var audio = new Audio(name);
+    audio.play();
+    let t3 = window.setInterval(()=>{
+        audio.play();
+    },audio.duration()*1000)
+}
+
 async function notification(id) {
     // let res = await ipcRenderer.invoke('work-notification')
     let res = await notifiF(id)
@@ -85,9 +94,13 @@ async function notification(id) {
         setTimeout(() => {
             alert('休息')
         }, 5 * 1000)
+        var audio = new Audio("../resource/chicken.mp3");
+        audio.play();
     } else if (res === 'work') {
         // startWork(20)
-        console.log("click")
+        var audio = new Audio("../resource/chicken.mp3");
+        audio.play();
+        console.log("close")
     }
 }
 
@@ -96,20 +109,21 @@ let updateData = async (data) => {
         client = await getClient()
     }
     let update_cmd = `update nct_timer
-                        set remaninder_time = ${data.remaninder_time}
+                        set remain_time = ${data.remain_time}, status = 3
                         where id = ${data.id}`
     let res = await client.awaitQuery(update_cmd)
     console.log(`update ${res}`)
 }
 
-let deleteData = async (id) => {
+let deleteData = async (index, id) => {
     document.getElementById(`exec-task-${id}`).remove()
-    s_tool.remove(id)
+    s_tool.status[index].status = 0;
+    // s_tool.remove(id)
     if (client == null) {
         client = await getClient()
     }
     let update_cmd = `update nct_timer
-                        set status = 0
+                        set status = 2
                         where id = ${id}`
     let res = await client.awaitQuery(update_cmd)
     console.log(`'delete :' + ${res}`)
@@ -118,32 +132,43 @@ let deleteData = async (id) => {
 // 启动Task
 let task_start = (id, value) => {
     console.log(s_tool.status)
+    let is_run = false
     for (let i = 0; i < s_tool.status.length; i++) {
+        if ((s_tool.status[i].remain_time == 0 || s_tool.status[i].remain_time == null ) && document.getElementById(`exec-task-${id}`)) {
+            deleteData(i, s_tool.status[i].id);
+        }
         if (s_tool.status[i].id == id) {
-            if (s_tool.status[i].isStart) {
+            if (s_tool.status[i].is_start == 1) {
                 s_tool.status[i].workTimer.pause();
                 console.log(`updateData`)
                 updateData(s_tool.status[i])
-                s_tool.status[i].isStart = false;
+                s_tool.status[i].is_start = 0;
             } else if (s_tool.status[i].workTimer != null) {
-                s_tool.status[i].isStart = true;
-                s_tool.status[i].workTimer.start(s_tool.status[i].remaninder_time);
+                s_tool.status[i].is_start = 1;
+                s_tool.status[i].workTimer.start(s_tool.status[i].remain_time);
             } else {
-                s_tool.status[i].isStart = true;
+                s_tool.status[i].is_start = 1;
                 s_tool.status[i].workTimer = new Timer({
                     ontick: (timeValue) => {
+                        audio_rain.play();
                         console.log('onclick')
                         updateTime(id, timeValue, i)
-                        s_tool.status[i].remaninder_time = (timeValue / 1000).toFixed(0);
+                        s_tool.status[i].remain_time = (timeValue / 1000).toFixed(0);
                     }, onend: () => {
                         console.log('onend')
                         notification(id)
-                        deleteData(id)
+                        deleteData(i, id)
                     }
                 });
-                s_tool.status[i].workTimer.start(s_tool.status[i].remaninder_time);
+                s_tool.status[i].workTimer.start(s_tool.status[i].remain_time);
             }
         }
+        if(s_tool.status[i].is_start == 1) {
+            is_run = true;
+        }
+    }
+    if(!is_run) {
+        audio_rain.pause()
     }
     // startWork(id,value)
 }
@@ -158,16 +183,16 @@ let generateTaskView = (data) => {
         name.setAttribute("id", `exec-task-name-${data.id}`)
         name.innerHTML = data.task_name
         time.setAttribute("id", `exec-task-time-${data.id}`)
-        time.innerHTML = `${parseInt(data.remaninder_time / 60).toString().padStart(2, 0)} : ${(data.remaninder_time % 60)
+        time.innerHTML = `${parseInt(data.remain_time / 60).toString().padStart(2, 0)} : ${(data.remain_time % 60)
             .toString().padStart(2, 0)} `
         progress[0].setAttribute("max", data.interval_time)
-        progress[0].setAttribute("value", data.remaninder_time)
+        progress[0].setAttribute("value", data.remain_time)
         console.log("该元素已经存在，无需添加")
     } else {
         let demo = document.getElementById("exec-task-demo");
         let demo1 = demo.cloneNode(true);
         demo1.setAttribute("id", `exec-task-${data.id}`)
-        demo1.setAttribute("onclick", `task_start(${data.id}, ${data.remaninder_time})`)
+        demo1.setAttribute("onclick", `task_start(${data.id}, ${data.remain_time})`)
         let div = demo1.getElementsByTagName("div")
         let name = div[0]
         let time = div[1]
@@ -175,20 +200,29 @@ let generateTaskView = (data) => {
         name.setAttribute("id", `exec-task-name-${data.id}`)
         name.innerHTML = data.task_name
         time.setAttribute("id", `exec-task-time-${data.id}`)
-        time.innerHTML = `${parseInt(data.remaninder_time / 60).toString().padStart(2, 0)} : ${(data.remaninder_time % 60)
+        time.innerHTML = `${parseInt(data.remain_time / 60).toString().padStart(2, 0)} : ${(data.remain_time % 60)
             .toString().padStart(2, 0)} `
         progress[0].setAttribute("id", `exec-task-progress-${data.id}`)
         progress[0].setAttribute("max", data.interval_time)
-        progress[0].setAttribute("value", data.remaninder_time)
+        progress[0].setAttribute("value", data.remain_time)
         document.getElementById("view-task").appendChild(demo1);
     }
 
     // demo1.onclick = task_start(id, value)
 }
 
+let init_client = async () => {
+    if (client == null) {
+        client = await getClient()
+    }
+}
 let updateStatus = async () => {
-    let select_cmd = `select * from nct_timer where status=1`
+    let select_cmd = `select * from nct_timer 
+                    where status=1 and start_date <= '${date.formatDate(new Date(),date.ymr)}'
+                    or status = 3
+                    and start_date <= '${date.formatDate(new Date(),date.ymr)}'`
     // 执行数据库操作
+    await init_client()
     let result = await client.awaitQuery(select_cmd)
     s_tool.update(result)
     console.log(s_tool.set_process)
@@ -222,7 +256,10 @@ let start = async () => {
 
         updateStatus()
         // console.log(result)
-        console.log('每隔1秒钟执行一次')
+        // console.log('每隔1秒钟执行一次')
     }, 10000)
 }
+
 start()
+
+module.exports.updateStatus = updateStatus
