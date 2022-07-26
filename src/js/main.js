@@ -4,20 +4,21 @@
 // `nodeIntegration` is turned off. Use `preload.js` to
 // selectively enable features needed in the rendering
 // process.
-// const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron')
 // const Timer = require('timer.js')
-let datas = require(`../lib/data`)
+let datas = require(`${__dirname}/../lib/data`)
 let menu = ['main', 'add', 'view', 'about']
-let date_tool = require(`../lib/date`)
+let date_tool = require(`${__dirname}/../lib/date`)
+let is_loading = true
 function change(id) {
     console.log("change");
-    for(let i=0;i<menu.length;i++) {
-        if(menu[i] != id) {
+    for (let i = 0; i < menu.length; i++) {
+        if (menu[i] != id) {
             document.getElementById(menu[i]).style.display = "none";
             document.getElementById(`a-${menu[i]}`).removeAttribute("class");
         } else {
             document.getElementById(menu[i]).style.display = "block";
-            document.getElementById(`a-${menu[i]}`).setAttribute("class","active");
+            document.getElementById(`a-${menu[i]}`).setAttribute("class", "active");
         }
     }
 }
@@ -28,7 +29,7 @@ let generateTaskShow = (data) => {
         // let demo1 = demo.cloneNode(true);
         // demo1.setAttribute("id", `show-task-${data.id}`)
         // demo1.setAttribute("onclick", `task_start(${data.id}, ${data.remain_time})`)
-        demo1.setAttribute("class",`TaskItem-${data.status}`)
+        demo1.setAttribute("class", `TaskItem-${data.status}`)
         let div1 = demo1.getElementsByTagName("div")
         let div = div1[0].getElementsByTagName("div")
         let name = div[0]
@@ -47,7 +48,7 @@ let generateTaskShow = (data) => {
         let demo1 = demo.cloneNode(true);
         demo1.setAttribute("id", `show-task-${data.id}`)
         // demo1.setAttribute("onclick", `task_start(${data.id}, ${data.remain_time})`)
-        demo1.setAttribute("class",`TaskItem-${data.status}`)
+        demo1.setAttribute("class", `TaskItem-${data.status}`)
         let div1 = demo1.getElementsByTagName("div")
         let div = div1[0].getElementsByTagName("div")
         let name = div[0]
@@ -73,17 +74,26 @@ async function load_task() {
         await datas.get_client()
     }
     let res = await datas.client[0].awaitQuery(cmd)
-    for(let i=0;i<res.length;i++) {
+    for (let i = 0; i < res.length; i++) {
         // console.log(res[i])
         generateTaskShow(res[i])
     }
 }
 
 let load_main_timer = async () => {
+    let t1 = window.setInterval(() => {
+        date_tool.startTime()
+    }, 1000);
     var t2 = window.setInterval(async function () {
         load_task()
+        if (is_loading) {
+            document.getElementById("loading").style.display = "none"
+            is_loading = false
+            document.getElementById("loading_success").style.display = "block"
+        }
     }, 10000)
 }
+
 
 load_main_timer()
 
@@ -92,3 +102,28 @@ load_main_timer()
 
 // }
 // startWork(10)
+
+// window.onload = () => {
+//     console.log("右键菜单");
+//     // 监听鼠标右键的点击事件
+//     window.addEventListener("contextmenu", (e) => {
+//         console.log("鼠标点击了右键");
+
+//         // 阻止默认事件
+//         e.preventDefault();
+
+//         // 调用popup方法弹出菜单
+//         ipcRenderer.send('menuBuilder');
+//     }, false);
+// }
+// const { ipcRenderer } = require('electron')
+
+
+
+document.addEventListener('contextmenu', function (e) {
+    console.log("鼠标点击了右键");
+    // 右键事件触发
+    e.preventDefault();
+
+    ipcRenderer.invoke('contextmenu');
+})

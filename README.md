@@ -30,3 +30,8 @@ insert into nct_timer (task_name,interval_time)
 values("task1", 600),
 ('task2',80);
 ```
+
+## 关于
+
+土鸡报时，给你最温馨的服务。
+

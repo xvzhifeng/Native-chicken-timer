@@ -1,11 +1,11 @@
 .exec-task {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     max-width: 40%;
     margin: 1rem;
-    box-shadow: 0 0 1px 0 darkgray;
+    box-shadow: 1px 2px 2px 1px darkgrey;
     float: left;
 }
 
@@ -15,4 +15,25 @@
 
 #exec-task-demo {
     display: none;
+}
+
+
+progress {
+    width: 168px;
+    height: 5px;
+    color: #94A7AE;
+    background: #EFEFF4;
+    border-radius: 0.1rem;
+}
+
+/* 表示总长度背景色 */
+progress::-webkit-progress-bar {
+    background-color: #f2f2f2;
+    border-radius: 0.2rem;
+}
+
+/* 表示已完成进度背景色 */
+progress::-webkit-progress-value {
+    background: #94A7AE;
+    border-radius: 0.2rem;
 }

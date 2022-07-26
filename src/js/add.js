@@ -1,6 +1,6 @@
 
-let data = require(`../lib/data`)
-let view = require(`../js/view`)
+let data = require(`${__dirname}/../lib/data`)
+let view = require(`${__dirname}/../js/view`)
 // let getClient = require('../lib/mysqlpool.js');
 // let client = null
 

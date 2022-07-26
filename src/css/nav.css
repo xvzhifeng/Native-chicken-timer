@@ -11,6 +11,13 @@ ul.sidenav {
     overflow: auto;
 }
 
+#current-time {
+    color: #344648;
+    position: fixed;
+    bottom:3rem;
+    left: 1.5rem;
+}
+
 ul.sidenav li a {
     display: block;
     color: #000;

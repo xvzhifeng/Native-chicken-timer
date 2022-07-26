@@ -23,86 +23,104 @@
         <li><a id="a-add" onclick="change('add')">添加</a></li>
         <li><a id="a-view" onclick="change('view')">查看</a></li>
         <li><a id="a-about" onclick="change('about')">关于</a></li>
+        <li><a><div id="current-time"></div></a></li>
     </ul>
 
     <div class="content">
-        <!-- main page -->
-        <div id="main" class="main">
-            <div id="show-task-staus-0" class="section">
-                <div class="show-task-demo">
-                    <div id="show-task-demo" class="TaskItem">
-                        <div class="Task" id="d-1" onclick="start('测试',40)">
-                            <div class="show-task-item">任务一：测试</div>
-                            <div class="show-task-item">time</div>
-                            <div class="show-task-item">date</div>
+        <div id="loading_success">
+
+
+            <!-- main page -->
+            <div id="main" class="main">
+                <div id="show-task-staus-0" class="section">
+                    <label class="main-lable">中断任务</label>
+                    <div class="show-task-demo">
+                        <div id="show-task-demo" class="TaskItem">
+                            <div class="Task" id="d-1" onclick="start('测试',40)">
+                                <div class="show-task-item">任务一：测试</div>
+                                <div class="show-task-item">time</div>
+                                <div class="show-task-item">date</div>
+                            </div>
                         </div>
                     </div>
+
                 </div>
-                
+                <div id="show-task-staus-1" class="section">
+                    <label class="main-lable">未开始</label>
+                </div>
+                <div id="show-task-staus-2" class="section">
+                    <label class="main-lable">已完成</label>
+                </div>
+                <div id="show-task-staus-3" class="section">
+                    <label class="main-lable">暂停中</label>
+                </div>
             </div>
-            <div id="show-task-staus-1" class="section"></div>
-            <div id="show-task-staus-2" class="section"></div>
-            <div id="show-task-staus-3" class="section"></div>
-        </div>
 
-        <!-- add page -->
-        <div id="add" class="add">
-            <div id="add_task">
-                <iframe id="iframe" name="iframe" style="display:none;"></iframe>
-                <div class="add_div">
-                    <form action="main.html" target="iframe">
-                        <label for="add_task_name">Task Name</label>
-                        <input class="add_input" type="text" id="add_task_name" name="add_task_name"
-                            placeholder="Task name.." required="required">
+            <!-- add page -->
+            <div id="add" class="add">
+                <div id="add_task">
+                    <iframe id="iframe" name="iframe" style="display:none;"></iframe>
+                    <div class="add_div">
+                        <form action="main.html" target="iframe">
+                            <label for="add_task_name">Task Name</label>
+                            <input class="add_input" type="text" id="add_task_name" name="add_task_name"
+                                placeholder="Task name.." required="required">
 
-                        <label for="add_task_time">time</label>
-                        <input class="add_input" type="number" max="6000" min="30" id="add_task_time"
-                            name="add_task_time" placeholder="need execute time.." required="required">
+                            <label for="add_task_time">time</label>
+                            <input class="add_input" type="number" max="6000" min="30" id="add_task_time"
+                                name="add_task_time" placeholder="need execute time.." required="required">
 
-                        <label for="add_task_date">date</label>
-                        <input class="add_input" type="date" id="add_task_date" min="2022-07-10" max="2022-08-01"
-                            name="add_task_date" placeholder="need execute date.." required="required">
-                        <!-- <label for="country">Country</label>
+                            <label for="add_task_date">date</label>
+                            <input class="add_input" type="date" id="add_task_date" min="2022-07-10" max="2022-08-01"
+                                name="add_task_date" placeholder="need execute date.." required="required">
+                            <!-- <label for="country">Country</label>
                         <select id="country" name="country">
                             <option value="australia">Australia</option>
                             <option value="canada">Canada</option>
                             <option value="usa">USA</option>
                         </select> -->
 
-                        <input class="add_submit" type="submit" value="Submit" onclick="addData()">
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- view page -->
-        <div id="view" class="view">
-            <div id="view-task" class="task">
-                <div id="exec-task-demo" class="exec-task" onclick="task_start(1,600)">
-                    <div id="exec-task-name-demo">
-                        Task Name 1
-                    </div>
-                    <div id="exec-task-time-demo">
-                        00:00
-                    </div>
-                    <div>
-                        <progress id="exec-task-progress-demo" value="0" max="123.321"></progress>
+                            <input class="add_submit" type="submit" value="Submit" onclick="addData()">
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- about page -->
-        <div id="about" class="about">
-            <div>
-                about
+            <!-- view page -->
+            <div id="view" class="view">
+                <div id="view-task" class="task">
+                    <div id="exec-task-demo" class="exec-task" onclick="task_start(1,600)">
+                        <div id="exec-task-name-demo">
+                            Task Name 1
+                        </div>
+                        <div id="exec-task-time-demo">
+                            00:00
+                        </div>
+                        <div>
+                            <progress id="exec-task-progress-demo" value="0" max="123.321"></progress>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <!-- about page -->
+            <div id="about" class="about">
+                <div>
+                    <h2>关于</h2>
+                    <p>土鸡报时，给你最温馨的服务。</p>
+                </div>
 
+            </div>
         </div>
-
+        <div id="loading">
+            <div class="loadingEight">
+                <span></span>
+            </div>
+        </div>
     </div>
     <script src="../js/main.js"></script>
     <script src="../js/view.js"></script>
     <script src="../js/about.js"></script>
     <script src="../js/add.js"></script>
+    <!-- <script src="../js/rightMenu.js"></script> -->
 </body>
 
 </html>

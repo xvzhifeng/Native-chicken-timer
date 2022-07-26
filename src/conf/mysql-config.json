@@ -1,7 +1,7 @@
 {
     "connectionLimit": 10,
-    "host": "m6",
+    "host": "blog.sumu.today",
     "user": "root",
     "password": "123456",
-    "database": "native_chicken_timer"
+    "database": "native_chicken_timer_dev"
 }

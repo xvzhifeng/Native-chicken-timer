@@ -12,7 +12,8 @@
     
     text-align: center;
     align-items: center;
-    max-width: 40%;
+    width: 40%;
+    height: 40%;
     margin: 1rem;
     box-shadow: 0 2px 2px 0 darkgray;
     float: left;
@@ -33,7 +34,7 @@
     border-radius: 1rem;
 }
 
-
+/* 取消 */
 .TaskItem-0 {
     /* display: flex; */
     
@@ -43,10 +44,11 @@
     margin: 1rem;
     box-shadow: 0 2px 2px 0 darkgray;
     float: left;
-    background-color: rgba(134, 11, 11, 0.61);
+    background-color: #F4F2F3;
     border-radius: 2px;
 }
 
+/* 未开始 */
 .TaskItem-1 {
     /* display: flex; */
     
@@ -56,10 +58,11 @@
     margin: 1rem;
     box-shadow: 0 2px 2px 0 darkgray;
     float: left;
-    background-color: rgba(79, 130, 160, 0.61);
+    background-color: #94A7AE;
     border-radius: 2px;
 }
 
+/* 完成 */
 .TaskItem-2 {
     /* display: flex; */
     
@@ -69,13 +72,14 @@
     margin: 1rem;
     box-shadow: 0 2px 2px 0 darkgray;
     float: left;
-    background-color: rgba(68, 184, 74, 0.61);
+    background-color: #64766A;
     border-radius: 2px;
 }
 
 #show-task-demo {
     display: none;
 }
+/* 暂停 */
 .TaskItem-3 {
     /* display: flex; */
     
@@ -85,7 +89,7 @@
     margin: 1rem;
     box-shadow: 0 2px 2px 0 darkgray;
     float: left;
-    background-color: rgba(163, 177, 38, 0.61);
+    background-color: #C0A9BD;
     border-radius: 2px;
 }
 
@@ -94,6 +98,7 @@
 }
 .main {
     /* display:none */
+    background-color:rgba(153, 152, 152, 0.3);
 }
 
 .view {
@@ -110,4 +115,55 @@
 
 .show-task-item {
     margin: 2px;
+}
+
+.loadingEight{
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top:100px;
+    position: relative;
+    border:5px solid lightgreen;
+    -webkit-animation: turn 2s linear infinite;
+}
+.loadingEight span{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: lightgreen;
+    position: absolute;
+    left: 50%;
+    margin-top: -15px;
+    margin-left: -15px;
+    -webkit-animation: changeBgColor 2s linear infinite;
+}
+@-webkit-keyframes changeBgColor{
+    0%{
+        background: lightgreen;
+    }
+    100%{
+        background: lightblue;
+    }
+}
+@-webkit-keyframes turn{
+    0%{
+        -webkit-transform: rotate(0deg);
+        border-color: lightgreen;
+    }
+    100%{
+        -webkit-transform: rotate(360deg);
+        border-color: lightblue;
+    }
+}
+
+#loading_success {
+    display: none;
+}
+
+.main-lable {
+    float: left;
+    width: 100%;
+    margin: 1rem;
 }

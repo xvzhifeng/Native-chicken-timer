@@ -21,3 +21,5 @@ record.md*
 *.njsproj
 *.sln
 *.sw?
+
+out/

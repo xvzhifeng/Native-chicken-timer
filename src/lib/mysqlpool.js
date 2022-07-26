@@ -4,7 +4,7 @@ let pollclient = null
 
 let createClient = async () => {
     /** Create connection pool using loaded config */
-    const pool = mysql.createPool(JSON.parse(fs.readFileSync(`./src/conf/mysql-config.json`)));
+    const pool = mysql.createPool(JSON.parse(fs.readFileSync(`${__dirname}/../conf/mysql-config.json`)));
 
     pool.on(`acquire`, (connection) => {
         console.log(`Connection %d acquired`, connection.threadId);

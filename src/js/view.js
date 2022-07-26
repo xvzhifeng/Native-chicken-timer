@@ -1,14 +1,15 @@
 const Timer = require('timer.js')
 // const { ipcRenderer } = require('electron')
-let getClient = require('../lib/mysqlpool.js');
-let s_tool = require('../lib/data')
-let date = require('../lib/date')
+let getClient = require(`${__dirname}/../lib/mysqlpool.js`);
+let s_tool = require(`${__dirname}/../lib/data`)
+let date = require(`${__dirname}/../lib/date`)
 let client = null
+let winprocess = [1,1]
 // let status = [
 //     {id:1, value:30, isStart:false, workTimer: null},
 //     {id:2, value:300, isStart:false, workTimer: null}
 // ]
-let audio_rain = new Audio(`../resource/rain.mp3`);
+let audio_rain = new Audio(`${__dirname}/../resource/data.mp3`);
 function progress_load(n) {
     if (n == 0) { alert("下载完成") };
     var progress = document.getElementById("progress");
@@ -94,11 +95,11 @@ async function notification(id) {
         setTimeout(() => {
             alert('休息')
         }, 5 * 1000)
-        var audio = new Audio("../resource/chicken.mp3");
+        var audio = new Audio(`${__dirname}/../resource/chicken.mp3`);
         audio.play();
     } else if (res === 'work') {
         // startWork(20)
-        var audio = new Audio("../resource/chicken.mp3");
+        var audio = new Audio(`${__dirname}/../resource/chicken.mp3`);
         audio.play();
         console.log("close")
     }
@@ -139,23 +140,32 @@ let task_start = (id, value) => {
         }
         if (s_tool.status[i].id == id) {
             if (s_tool.status[i].is_start == 1) {
+                winprocess[1] -= s_tool.status[i].interval_time
+                winprocess[0] -= s_tool.status[i].remain_time
                 s_tool.status[i].workTimer.pause();
                 console.log(`updateData`)
                 updateData(s_tool.status[i])
                 s_tool.status[i].is_start = 0;
             } else if (s_tool.status[i].workTimer != null) {
+                winprocess[1] += s_tool.status[i].interval_time
+                winprocess[0] += s_tool.status[i].remain_time
                 s_tool.status[i].is_start = 1;
                 s_tool.status[i].workTimer.start(s_tool.status[i].remain_time);
             } else {
+                winprocess[1] += s_tool.status[i].interval_time
+                winprocess[0] += s_tool.status[i].remain_time
                 s_tool.status[i].is_start = 1;
                 s_tool.status[i].workTimer = new Timer({
                     ontick: (timeValue) => {
                         audio_rain.play();
                         console.log('onclick')
+                        winprocess[0]--;
                         updateTime(id, timeValue, i)
                         s_tool.status[i].remain_time = (timeValue / 1000).toFixed(0);
+                        ipcRenderer.invoke("win-progress",{per:winprocess[0]+1/winprocess[1]})
                     }, onend: () => {
                         console.log('onend')
+                        ipcRenderer.invoke("win-progress",{per:-1})
                         notification(id)
                         deleteData(i, id)
                     }
