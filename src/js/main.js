@@ -127,3 +127,35 @@ document.addEventListener('contextmenu', function (e) {
 
     ipcRenderer.invoke('contextmenu');
 })
+
+// 拖拽事件
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+let drag = (ev) => {
+    ev.dataTransfer.setData("Text", ev.target.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("Text");
+    // ev.target.appendChild(document.getElementById(data));
+    console.log(`${data} => ${ev.target.id}`)
+    aTob(data, ev.target.id.replace(/[^\d]/g, ''))
+}
+
+async function aTob(a, status) {
+    if (datas.client.length == 0) {
+        await datas.get_client()
+    }
+
+    let demo = document.getElementById(a)
+    demo.setAttribute("class", `TaskItem-${status}`)
+    document.getElementById(`show-task-staus-${status}`).appendChild(demo)
+    let cmd = `update nct_timer set status = ${status}
+                where id = ${a.replace(/[^\d]/g, '')}`
+    let res = await datas.client[0].awaitQuery(cmd)
+    console.log(res)
+}

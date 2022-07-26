@@ -4,7 +4,7 @@ let getClient = require(`${__dirname}/../lib/mysqlpool.js`);
 let s_tool = require(`${__dirname}/../lib/data`)
 let date = require(`${__dirname}/../lib/date`)
 let client = null
-let winprocess = [1,1]
+let winprocess = [1, 1]
 // let status = [
 //     {id:1, value:30, isStart:false, workTimer: null},
 //     {id:2, value:300, isStart:false, workTimer: null}
@@ -81,9 +81,9 @@ let notifiF = async (id) => {
 function player(name) {
     var audio = new Audio(name);
     audio.play();
-    let t3 = window.setInterval(()=>{
+    let t3 = window.setInterval(() => {
         audio.play();
-    },audio.duration()*1000)
+    }, audio.duration() * 1000)
 }
 
 async function notification(id) {
@@ -135,7 +135,7 @@ let task_start = (id, value) => {
     console.log(s_tool.status)
     let is_run = false
     for (let i = 0; i < s_tool.status.length; i++) {
-        if ((s_tool.status[i].remain_time == 0 || s_tool.status[i].remain_time == null ) && document.getElementById(`exec-task-${id}`)) {
+        if ((s_tool.status[i].remain_time == 0 || s_tool.status[i].remain_time == null) && document.getElementById(`exec-task-${id}`)) {
             deleteData(i, s_tool.status[i].id);
         }
         if (s_tool.status[i].id == id) {
@@ -162,10 +162,10 @@ let task_start = (id, value) => {
                         winprocess[0]--;
                         updateTime(id, timeValue, i)
                         s_tool.status[i].remain_time = (timeValue / 1000).toFixed(0);
-                        ipcRenderer.invoke("win-progress",{per:winprocess[0]+1/winprocess[1]})
+                        ipcRenderer.invoke("win-progress", { per: winprocess[0] + 1 / winprocess[1] })
                     }, onend: () => {
                         console.log('onend')
-                        ipcRenderer.invoke("win-progress",{per:-1})
+                        ipcRenderer.invoke("win-progress", { per: -1 })
                         notification(id)
                         deleteData(i, id)
                     }
@@ -173,11 +173,11 @@ let task_start = (id, value) => {
                 s_tool.status[i].workTimer.start(s_tool.status[i].remain_time);
             }
         }
-        if(s_tool.status[i].is_start == 1) {
+        if (s_tool.status[i].is_start == 1) {
             is_run = true;
         }
     }
-    if(!is_run) {
+    if (!is_run) {
         audio_rain.pause()
     }
     // startWork(id,value)
@@ -228,25 +228,22 @@ let init_client = async () => {
 }
 let updateStatus = async () => {
     let select_cmd = `select * from nct_timer 
-                    where status=1 and start_date <= '${date.formatDate(new Date(),date.ymr)}'
+                    where status=1 and start_date <= '${date.formatDate(new Date(), date.ymr)}'
                     or status = 3
-                    and start_date <= '${date.formatDate(new Date(),date.ymr)}'`
+                    and start_date <= '${date.formatDate(new Date(), date.ymr)}'`
     // 执行数据库操作
     await init_client()
     let result = await client.awaitQuery(select_cmd)
     s_tool.update(result)
     console.log(s_tool.set_process)
-    if (s_tool.get_is_change()) {
-        for (let i = 0; i < s_tool.status.length; i++) {
-            console.log(s_tool.status[i].id)
-            if (s_tool.is_change.has(s_tool.status[i].id)) {
-                generateTaskView(s_tool.status[i])
-                s_tool.set_is_change(s_tool.status[i].id)
-            }
-        }
-        s_tool.set_is_change(false)
-        console.log(s_tool.is_change)
+
+    for (let i = 0; i < s_tool.status.length; i++) {
+        console.log(s_tool.status[i].id)
+        generateTaskView(s_tool.status[i])
     }
+    
+    console.log(s_tool.is_change)
+
     console.log(s_tool.status)
 }
 

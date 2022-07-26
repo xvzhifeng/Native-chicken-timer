@@ -32,10 +32,10 @@
 
             <!-- main page -->
             <div id="main" class="main">
-                <div id="show-task-staus-0" class="section">
+                <div id="show-task-staus-0" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">中断任务</label>
                     <div class="show-task-demo">
-                        <div id="show-task-demo" class="TaskItem">
+                        <div id="show-task-demo" class="TaskItem" draggable="true" ondragstart="drag(event)">
                             <div class="Task" id="d-1" onclick="start('测试',40)">
                                 <div class="show-task-item">任务一：测试</div>
                                 <div class="show-task-item">time</div>
@@ -45,13 +45,13 @@
                     </div>
 
                 </div>
-                <div id="show-task-staus-1" class="section">
+                <div id="show-task-staus-1" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">未开始</label>
                 </div>
-                <div id="show-task-staus-2" class="section">
+                <div id="show-task-staus-2" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">已完成</label>
                 </div>
-                <div id="show-task-staus-3" class="section">
+                <div id="show-task-staus-3" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">暂停中</label>
                 </div>
             </div>

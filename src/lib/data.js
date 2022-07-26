@@ -15,6 +15,7 @@ let update_task = (result) => {
 }
 
 let update = (result) => {
+    let database_set = new Set()
     for (let i = 0; i < result.length; i++) {
         if(!set_process.has(result[i].id)) {
             status.push({...result[i],workTimer: null})
@@ -24,7 +25,8 @@ let update = (result) => {
             // generateTaskView(result[i])
         } else {
             for(let j =0;j<status.length;j++) {
-                if(result[i].id == status[j].id && result[i].remain_time < status[j].remain_time) {
+                if(result[i].id == status[j].id && result[i].remain_time != status[j].remain_time && 
+                    result[i].status != status[j].status) {
                     is_change.add(result[i].id);
                     console.log("change status")
                     console.log(`result[i].remain_time ${result[i].remain_time} != status[j].remain_time
@@ -32,8 +34,25 @@ let update = (result) => {
                 }
             }
         }
+        database_set.add(result[i].id)
         // console.log(result[i].id)
     }
+    console.log(database_set)
+    while(true) {
+        for(let i =0;i<status.length;i++) {
+            if(!database_set.has(status[i].id)) {
+                set_process.delete(status[i].id)
+                if(document.getElementById(`exec-task-${status[i].id}`)) {
+                    document.getElementById(`exec-task-${status[i].id}`).remove()
+                }
+                
+                status.splice(i,1);
+                continue;
+            }
+        }
+        break
+    }
+    
 }
 
 let remove = (id) => {
