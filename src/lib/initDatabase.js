@@ -1,6 +1,5 @@
 const fs = require(`fs`);
 const mysql = require(`mysql`);
-db_host = 'blog.sumu.today'
 database_name = 'native_chicken_timer_dev'
 
 
