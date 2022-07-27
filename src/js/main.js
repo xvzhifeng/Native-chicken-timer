@@ -7,7 +7,7 @@
 const { ipcRenderer } = require('electron')
 // const Timer = require('timer.js')
 let datas = require(`${__dirname}/../lib/data`)
-let menu = ['main', 'add', 'view', 'about']
+let menu = ['main', 'add', 'view', 'about','edit']
 let date_tool = require(`${__dirname}/../lib/date`)
 let is_loading = true
 function change(id) {
@@ -47,7 +47,7 @@ let generateTaskShow = (data) => {
         let demo = document.getElementById("show-task-demo");
         let demo1 = demo.cloneNode(true);
         demo1.setAttribute("id", `show-task-${data.id}`)
-        // demo1.setAttribute("onclick", `task_start(${data.id}, ${data.remain_time})`)
+        demo1.setAttribute("onclick", `toEdit(${data.id},'${data.task_name}','${data.interval_time}','${date_tool.formatDate(data.start_date,date_tool.ymr)}')`)
         demo1.setAttribute("class", `TaskItem-${data.status}`)
         let div1 = demo1.getElementsByTagName("div")
         let div = div1[0].getElementsByTagName("div")
@@ -66,6 +66,7 @@ let generateTaskShow = (data) => {
     // demo1.onclick = task_start(id, value)
 }
 
+module.exports.load_task = load_task
 async function load_task() {
     cmd = `select * from nct_timer`
 
@@ -159,3 +160,19 @@ async function aTob(a, status) {
     let res = await datas.client[0].awaitQuery(cmd)
     console.log(res)
 }
+
+async function drop_delete(ev) {
+    if (datas.client.length == 0) {
+        await datas.get_client()
+    }
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("Text");
+    console.log(data)
+    document.getElementById(data).remove()
+    let cmd = `update nct_timer set status = ${5}
+                where id = ${data.replace(/[^\d]/g, '')}`
+    let res = await datas.client[0].awaitQuery(cmd)
+    console.log(`${cmd} ====> \n  execute`)
+}
+
+module.exports.change = change

@@ -1,5 +1,5 @@
 .listTask {
-    background-color:rgba(153, 152, 152, 0.3);
+    background-color: rgba(153, 152, 152, 0.3);
     margin: 2px;
 }
 
@@ -9,7 +9,7 @@
 
 .TaskItem {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     width: 40%;
@@ -37,7 +37,7 @@
 /* 取消 */
 .TaskItem-0 {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     max-width: 40%;
@@ -51,7 +51,7 @@
 /* 未开始 */
 .TaskItem-1 {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     max-width: 40%;
@@ -65,7 +65,7 @@
 /* 完成 */
 .TaskItem-2 {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     max-width: 40%;
@@ -79,10 +79,11 @@
 #show-task-demo {
     display: none;
 }
+
 /* 暂停 */
 .TaskItem-3 {
     /* display: flex; */
-    
+
     text-align: center;
     align-items: center;
     max-width: 40%;
@@ -96,9 +97,10 @@
 .task {
     flex-direction: row;
 }
+
 .main {
     /* display:none */
-    background-color:rgba(153, 152, 152, 0.3);
+    background-color: rgba(153, 152, 152, 0.3);
 }
 
 .view {
@@ -109,7 +111,11 @@
     display: none;
 }
 
-.about{
+.about {
+    display: none;
+}
+
+.edit {
     display: none;
 }
 
@@ -117,17 +123,18 @@
     margin: 2px;
 }
 
-.loadingEight{
+.loadingEight {
     width: 80px;
     height: 80px;
     border-radius: 50%;
     margin: 0 auto;
-    margin-top:100px;
+    margin-top: 100px;
     position: relative;
-    border:5px solid lightgreen;
+    border: 5px solid lightgreen;
     -webkit-animation: turn 2s linear infinite;
 }
-.loadingEight span{
+
+.loadingEight span {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -139,20 +146,24 @@
     margin-left: -15px;
     -webkit-animation: changeBgColor 2s linear infinite;
 }
-@-webkit-keyframes changeBgColor{
-    0%{
+
+@-webkit-keyframes changeBgColor {
+    0% {
         background: lightgreen;
     }
-    100%{
+
+    100% {
         background: lightblue;
     }
 }
-@-webkit-keyframes turn{
-    0%{
+
+@-webkit-keyframes turn {
+    0% {
         -webkit-transform: rotate(0deg);
         border-color: lightgreen;
     }
-    100%{
+
+    100% {
         -webkit-transform: rotate(360deg);
         border-color: lightblue;
     }
@@ -166,4 +177,38 @@
     float: left;
     /* width: 100%; */
     margin: 1rem;
+}
+
+.delete-task {
+    width: 3rem;
+    height: 3rem;
+    background-color: #acbe08;
+    float: right;
+    border-radius: 3px;
+    box-shadow: 0px 2px 2px 0px #515352;
+    margin: 1rem;
+}
+
+.gg-remove {
+    box-sizing: border-box;
+    position: relative;
+    display: block;
+    transform: scale(var(--ggs, 1));
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    border-radius: 22px
+}
+
+.gg-remove::before {
+    content: "";
+    display: block;
+    box-sizing: border-box;
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    border-radius: 5px;
+    top: 50%;
+    left: 0px
 }

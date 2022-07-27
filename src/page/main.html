@@ -23,7 +23,11 @@
         <li><a id="a-add" onclick="change('add')">添加</a></li>
         <li><a id="a-view" onclick="change('view')">查看</a></li>
         <li><a id="a-about" onclick="change('about')">关于</a></li>
-        <li><a><div id="current-time"></div></a></li>
+        <li style="display: none;"><a id="a-edit">编辑 </a></li>
+        <li><a>
+                <div id="current-time"></div>
+            </a>
+        </li>
     </ul>
 
     <div class="content">
@@ -32,6 +36,10 @@
 
             <!-- main page -->
             <div id="main" class="main">
+                <div id="delete-task" class="delete-task">
+                    <div class="gg-remove" id="delete-task" ondrop="drop_delete(event)" ondragover="allowDrop(event)">
+                    </div>
+                </div>
                 <div id="show-task-staus-0" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">中断任务</label>
                     <div class="show-task-demo">
@@ -53,6 +61,9 @@
                 </div>
                 <div id="show-task-staus-3" class="section" ondrop="drop(event)" ondragover="allowDrop(event)">
                     <label class="main-lable">暂停中</label>
+                </div>
+                <div id="show-task-staus-5" class="section" style="display: none;">
+                    <label class="main-lable">删除的项目</label>
                 </div>
             </div>
 
@@ -81,6 +92,36 @@
                         </select> -->
 
                             <input class="add_submit" type="submit" value="Submit" onclick="addData()">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- edit page -->
+            <div id="edit" class="edit">
+                <div id="edit_task">
+                    <div class="add_div">
+                        <form action="main.html" target="iframe">
+                            <label for="edit_task_name">Task Name</label>
+                            <input class="add_input" type="text" id="edit_task_name" name="edit_task_name"
+                                placeholder="Task name.." required="required">
+
+                            <label for="edit_task_time">time</label>
+                            <input class="add_input" type="number" max="6000" min="30" id="edit_task_time"
+                                name="edit_task_time" placeholder="need execute time.." required="required">
+
+                            <label for="edit_task_date">date</label>
+                            <input class="add_input" type="date" id="edit_task_date" min="2022-07-10" max="2022-08-01"
+                                name="edit_task_date" placeholder="need execute date.." required="required">
+                            <!-- <label for="country">Country</label>
+                        <select id="country" name="country">
+                            <option value="australia">Australia</option>
+                            <option value="canada">Canada</option>
+                            <option value="usa">USA</option>
+                        </select> -->
+
+                            <input id="edit_submit" class="add_submit" type="submit" value="Submit"
+                                onclick="editData(0)">
                         </form>
                     </div>
                 </div>
