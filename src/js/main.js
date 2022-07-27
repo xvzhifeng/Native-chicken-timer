@@ -40,6 +40,7 @@ let generateTaskShow = (data) => {
         time.setAttribute("id", `show-task-time-${data.id}`)
         time.innerHTML = `${parseInt(data.remain_time / 60).toString().padStart(2, 0)} : ${(data.remain_time % 60)
             .toString().padStart(2, 0)} `
+        date.setAttribute("id", `show-task-date-${data.id}`)
         data.start_date == null ? date.innerHTML = '未知' : date.innerHTML = date_tool.formatDate(data.start_date, date_tool.ymr)
         document.getElementById(`show-task-staus-${data.status}`).appendChild(demo1)
         // console.log("main - 该元素已经存在，无需添加")
@@ -57,6 +58,7 @@ let generateTaskShow = (data) => {
         name.setAttribute("id", `show-task-name-${data.id}`)
         name.innerHTML = data.task_name
         time.setAttribute("id", `show-task-time-${data.id}`)
+        date.setAttribute("id", `show-task-date-${data.id}`)
         time.innerHTML = `${parseInt(data.remain_time / 60).toString().padStart(2, 0)} : ${(data.remain_time % 60)
             .toString().padStart(2, 0)} `
         data.start_date == null ? date.innerHTML = '未知' : date.innerHTML = date_tool.formatDate(data.start_date, date_tool.ymr)
@@ -124,9 +126,21 @@ load_main_timer()
 document.addEventListener('contextmenu', function (e) {
     console.log("鼠标点击了右键");
     // 右键事件触发
+    console.log(e.x,e.y)
     e.preventDefault();
-
-    ipcRenderer.invoke('contextmenu');
+    let click_element = document.elementFromPoint(e.x,e.y)
+    let classname = click_element.getAttribute('class')
+    let id = click_element.getAttribute('id')
+    // 编辑task选项
+    if(classname?.includes('TaskItem') || id?.includes("show-task-time") || id?.includes("show-task-name") 
+    || id?.includes("show-task-date") 
+    ) {
+        ipcRenderer.invoke('ContextTask')
+    } else {
+        ipcRenderer.invoke('contextmenu');
+    }
+    console.log(click_element)
+    
 })
 
 // 拖拽事件

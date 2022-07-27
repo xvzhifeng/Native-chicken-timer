@@ -24,6 +24,9 @@ function createWindow() {
   ipcMain.handle('contextmenu', () => {
     contextmenu.popup(BrowserWindow.getFocusedWindow());
   });
+  ipcMain.handle('ContextTask', ()=> {
+    ContextTask.popup(BrowserWindow.getFocusedWindow())
+  })
   handleIPC(mainWindow)
 
   // Open the DevTools.
@@ -55,6 +58,27 @@ let menuContextTemplate = [
       db.init()
       console.log("初始化数据库");
     }
+  },
+  {
+    label: "声音",
+    submenu: [
+      {
+        label: "关闭",
+        click: () => {
+          mainWindow.webContents.send('close_volume', { 'is': false })
+          console.log("关闭声音");
+        }
+      },
+      {
+        label: "开启",
+        click: () => {
+          mainWindow.webContents.send('close_volume', { 'is': true })
+          console.log("开启声音");
+        }
+
+      }
+    ]
+
   },
   // 也可以定义子菜单哦
   {
@@ -91,9 +115,25 @@ let menuContextTemplate = [
   }
 ];
 
+// 任务菜单
+let menuContextTask = [
+  {
+    label: "编辑",
+    click: () => {
+      console.log("编辑");
+    }
+  }, {
+    label: "复制",
+    click: () => {
+      console.log("复制");
+    }
+  }
+];
+
 // 用于构建MenuItem
 let contextmenu = Menu.buildFromTemplate(menuContextTemplate);
 
+let ContextTask = Menu.buildFromTemplate(menuContextTask)
 
 
 function handleIPC(win) {
@@ -119,7 +159,7 @@ function handleIPC(win) {
     return res
   })
 
-  ipcMain.handle('win-progress', (envent, data)=> {
+  ipcMain.handle('win-progress', (envent, data) => {
     console.log(data)
     win.setProgressBar(data.per)
   })

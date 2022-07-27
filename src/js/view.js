@@ -10,6 +10,17 @@ let winprocess = [1, 1]
 //     {id:2, value:300, isStart:false, workTimer: null}
 // ]
 let audio_rain = new Audio(`${__dirname}/../resource/data.mp3`);
+let is_audio = true
+function stop_audio(data) {
+    audio_rain.pause()
+    is_audio = data;
+}
+ipcRenderer.on("close_volume", (e,data)=> {
+    console.log("close_volume " + data.is)
+    stop_audio(data.is)
+})
+
+module.exports.stop_audio = stop_audio
 function progress_load(n) {
     if (n == 0) { alert("下载完成") };
     var progress = document.getElementById("progress");
@@ -143,6 +154,7 @@ let task_start = (id, value) => {
                 winprocess[1] -= s_tool.status[i].interval_time
                 winprocess[0] -= s_tool.status[i].remain_time
                 s_tool.status[i].workTimer.pause();
+                ipcRenderer.invoke("win-progress", { per: -1 })
                 console.log(`updateData`)
                 updateData(s_tool.status[i])
                 s_tool.status[i].is_start = 0;
@@ -157,13 +169,16 @@ let task_start = (id, value) => {
                 s_tool.status[i].is_start = 1;
                 s_tool.status[i].workTimer = new Timer({
                     ontick: (timeValue) => {
-                        audio_rain.play();
+                        if(is_audio) {
+                            audio_rain.play();
+                        }
                         console.log('onclick')
                         winprocess[0]--;
                         updateTime(id, timeValue, i)
                         s_tool.status[i].remain_time = (timeValue / 1000).toFixed(0);
                         ipcRenderer.invoke("win-progress", { per: winprocess[0] + 1 / winprocess[1] })
                     }, onend: () => {
+                        audio_rain.pause()
                         console.log('onend')
                         ipcRenderer.invoke("win-progress", { per: -1 })
                         notification(id)
@@ -239,7 +254,10 @@ let updateStatus = async () => {
 
     for (let i = 0; i < s_tool.status.length; i++) {
         console.log(s_tool.status[i].id)
-        generateTaskView(s_tool.status[i])
+        if(s_tool.status[i].is_start != 1) {
+            generateTaskView(s_tool.status[i])
+        }
+        
     }
     
     console.log(s_tool.is_change)
