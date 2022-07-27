@@ -6,11 +6,15 @@ let main = require(`${__dirname}/../js/main`)
 // let client = null
 
 
-let addData = async () => {
-    
+let addData = async (ev) => {
+    console.log(ev)
     let task_name = document.getElementById("add_task_name")
     let task_time = document.getElementById("add_task_time")
     let task_date = document.getElementById("add_task_date")
+    if (parseInt(task_time.value) < 30 || parseInt(task_time.value) > 60000 || task_name.value == ''
+        || parseInt(task_time.value).toString() == 'NaN' || task_time.value == '') {
+        return;
+    }
     cmd = `insert into nct_timer(task_name,interval_time,remain_time,start_date)
             values('${task_name.value}',${parseInt(task_time.value)},${parseInt(task_time.value)},'${task_date.value}')`
 
@@ -25,7 +29,7 @@ let addData = async () => {
     alert("添加成功")
     main.change('main')
 }
-let toEdit = (id,task_name_v,interval_time_v,start_date_v) => {
+let toEdit = (id, task_name_v, interval_time_v, start_date_v) => {
     main.change('edit')
     let task_name = document.getElementById("edit_task_name")
     let task_time = document.getElementById("edit_task_time")
@@ -38,7 +42,7 @@ let toEdit = (id,task_name_v,interval_time_v,start_date_v) => {
     edit_submit.setAttribute("onclick", `editData(${id})`)
 }
 let editData = async (id) => {
-    
+
     let task_name = document.getElementById("edit_task_name")
     let task_time = document.getElementById("edit_task_time")
     let task_date = document.getElementById("edit_task_date")
@@ -71,7 +75,7 @@ function formatDate(date, format) {
 let init = () => {
     let date = new Date()
     let min = formatDate(date, "yyyy-mm-dd")
-    let max = formatDate(new Date(new Date().getTime()+2592000000), "yyyy-mm-dd")
+    let max = formatDate(new Date(new Date().getTime() + 2592000000), "yyyy-mm-dd")
     console.log(max)
     // let min = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`
     let task_date = document.getElementById("add_task_date")
