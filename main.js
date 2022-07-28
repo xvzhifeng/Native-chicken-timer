@@ -2,6 +2,7 @@
 const { app, BrowserWindow, ipcMain, Notification, Menu } = require('electron')
 let db = require(`${__dirname}/src/lib/initDatabase`)
 const path = require('path')
+require('update-electron-app')()
 
 let mainWindow
 // 01、创建一个窗口

@@ -4,7 +4,7 @@ database_name = 'native_chicken_timer_dev'
 
 
 function create_init() {
-    var connection = mysql.createConnection(JSON.parse(fs.readFileSync(`${__dirname}/../conf/mysql-config.json`)));
+    var connection = mysql.createConnection(JSON.parse(fs.readFileSync(`${__dirname}/../../conf/mysql-config.json`)));
     connection.connect(function (err) {
         if (err) {
             console.error('error connecting: ' + err.stack);

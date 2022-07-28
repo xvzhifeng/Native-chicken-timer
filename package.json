@@ -1,12 +1,13 @@
 {
   "name": "native-chicken-timer",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "version": "1.1.0",
+  "description": "A Native-chicken-timer Electron application",
   "main": "main.js",
   "scripts": {
     "start": "chcp 65001 && electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "publish": "electron-forge publish"
   },
   "repository": "https://github.com/xvzhifeng/Native-chicken-timer.git",
   "keywords": [
@@ -23,17 +24,40 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.65",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
     "@electron-forge/maker-zip": "^6.0.0-beta.65",
-    "electron": "^17.0.0"
+    "@electron-forge/publisher-github": "^6.0.0-beta.65",
+    "electron": "^17.0.0",
+    "electron-wix-msi": "^4.0.0"
   },
   "dependencies": {
+    "@electron-forge/maker-wix": "^6.0.0-beta.65",
     "electron-squirrel-startup": "^1.0.0",
     "mysql": "^2.18.1",
     "mysql-await": "^2.1.8",
-    "timer.js": "^1.0.4"
+    "timer.js": "^1.0.4",
+    "update-electron-app": "^2.0.1"
   },
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "xvzhifeng",
+              "name": "Native-chicken-timer"
+            },
+            "authToken": "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",
+            "prerelease": false,
+            "draft": false
+          }
+        }
+      ],
+      "packagerConfig": {
+        "appVersion": "0.0.1",
+        "name": "土鸡报时",
+        "appCopyright": "xvzhifeng(xvzhifeng@126.com)",
+        "icon": "./assets/img/appIcon/appicon"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -43,17 +67,24 @@
         },
         {
           "name": "@electron-forge/maker-zip",
+          "config": {
+            "name": "native_chicken_timer"
+          },
           "platforms": [
-            "darwin"
+            "win32"
           ]
         },
         {
           "name": "@electron-forge/maker-deb",
-          "config": {}
+          "config": {
+            "name": "native_chicken_timer"
+          }
         },
         {
           "name": "@electron-forge/maker-rpm",
-          "config": {}
+          "config": {
+            "name": "native_chicken_timer"
+          }
         }
       ]
     }

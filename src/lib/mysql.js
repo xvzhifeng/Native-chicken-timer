@@ -4,7 +4,7 @@ const mysql = require(`mysql-await`);
 /** Self-executing asynchronous function so we can await results in this example */
 (async () => {
     /** Create connection pool using loaded config */
-    const connection = mysql.createConnection(JSON.parse(fs.readFileSync(`${__dirname}/../conf/mysql-config.json`)));
+    const connection = mysql.createConnection(JSON.parse(fs.readFileSync(`${__dirname}/../../conf/mysql-config.json`)));
 
     connection.on(`error`, (err) => {
         console.error(`Connection error ${err.code}`);
