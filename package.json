@@ -1,7 +1,7 @@
 {
   "name": "native-chicken-timer",
-  "version": "1.1.0",
-  "description": "A Native-chicken-timer Electron application",
+  "version": "1.1.1",
+  "description": "A Native chicken timer Electron application",
   "main": "main.js",
   "scripts": {
     "start": "chcp 65001 && electron-forge start",
@@ -41,12 +41,15 @@
       "publishers": [
         {
           "name": "@electron-forge/publisher-github",
+          "GITHUB_TOKEN": "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",
           "config": {
+            "GITHUB_TOKEN": "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",
             "repository": {
+              "GITHUB_TOKEN": "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",
               "owner": "xvzhifeng",
               "name": "Native-chicken-timer"
             },
-            "authToken": "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",
+            "authToken": "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",
             "prerelease": false,
             "draft": false
           }
